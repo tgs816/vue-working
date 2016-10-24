@@ -38,11 +38,15 @@ class Home @Inject()(val messagesApi: MessagesApi, currencyDao: dao.currencyDao)
     }.getOrElse(BadRequest)
   }
 
+  // POST -> 데이터 수정하기
+
   def currencyEdit = Action { implicit request =>
     forms.Currency.currency(isAdd = false).bindFromRequest.fold(
       formWithErrors => BadRequest(formWithErrors.errorsAsJson), {
-        case currencyForm => currencyDao.update(currencyForm) match {
-          case 1 => Ok(views.html.currency(currencyDao.select))
+        case currencyForm => currencyDao.updateOne(currencyForm) match {
+          //case r => Ok(Json.toJson(r))
+          //case 1 => Ok(views.html.currency(currencyDao.select))
+          case 1 => Ok(Json.toJson(currencyDao.select))
           case _ => BadRequest
         }
       }

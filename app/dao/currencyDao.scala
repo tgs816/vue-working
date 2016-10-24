@@ -43,9 +43,23 @@ class currencyDao @Inject() (db:Database) {
             "currency_symbol"  = ${form.currencySymbol}
         WHERE "currency_code" = ${form.currencyCode}
       """.executeUpdate
-
     }
   }
+
+  // 업데이트 후 해당 객체 리턴해주면 좋겟다
+  def updateOne(form: models.Currency) = {
+    db.withConnection { implicit c =>
+      SQL"""
+        UPDATE "currency"
+        SET "currency_name"    = ${form.currencyName},
+            "currency_name_en" = ${form.currencyNameEn},
+            "currency_symbol"  = ${form.currencySymbol}
+        WHERE "currency_code" = ${form.currencyCode}
+      """.executeUpdate()
+    }
+  }
+
+
 
   def delete(id: String) = {
     db.withConnection { implicit c =>
